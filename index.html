@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hesap Güvenlik Kontrolü</title>
+<style>
+  :root{
+    --bg:#0f1420;
+    --panel:#161d2e;
+    --accent:#ffb020;
+    --accent2:#3ddc97;
+    --text:#eef1f8;
+    --muted:#8b93a8;
+    --danger:#ff5a5f;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,176,32,0.12), transparent 45%),
+      radial-gradient(circle at 80% 85%, rgba(61,220,151,0.10), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    padding-top:calc(24px + env(safe-area-inset-top, 0px));
+    padding-bottom:calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  .card{
+    width:100%;
+    max-width:380px;
+    background:var(--panel);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:16px;
+    padding:32px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+  .badge{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:0.4px;
+    color:var(--accent);
+    background:rgba(255,176,32,0.12);
+    border:1px solid rgba(255,176,32,0.3);
+    padding:4px 10px;
+    border-radius:20px;
+    margin-bottom:18px;
+  }
+  h1{
+    font-size:22px;
+    line-height:1.3;
+    margin:0 0 8px;
+  }
+  p.sub{
+    color:var(--muted);
+    font-size:14px;
+    margin:0 0 26px;
+    line-height:1.5;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:6px;
+    margin-top:18px;
+  }
+  input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.1);
+    background:#0d1320;
+    color:var(--text);
+    font-size:15px;
+    outline:none;
+    transition: border-color 0.15s;
+  }
+  input:focus{
+    border-color:var(--accent);
+  }
+  .error{
+    color:var(--danger);
+    font-size:13px;
+    min-height:18px;
+    margin-top:8px;
+  }
+  button{
+    width:100%;
+    margin-top:24px;
+    padding:13px 14px;
+    border:none;
+    border-radius:10px;
+    background:var(--accent);
+    color:#1a1200;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    transition: transform 0.1s, background 0.15s;
+  }
+  button:active{
+    transform: scale(0.98);
+  }
+  .foot{
+    margin-top:18px;
+    font-size:11.5px;
+    color:var(--muted);
+    text-align:center;
+    line-height:1.5;
+  }
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:18px;
+    z-index:50;
+    padding:20px;
+    text-align:center;
+  }
+  .overlay.show{display:flex;}
+  .overlay h2{
+    font-size:26px;
+    margin:0;
+  }
+  .overlay iframe{
+    width:min(90vw, 480px);
+    aspect-ratio:16/9;
+    border:none;
+    border-radius:12px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="badge">Hesap Kontrolü</span>
+    <h1>MLBB hesabını doğrula</h1>
+    <p class="sub">Şüpheli giriş tespit edildi. Devam etmek için hesap ID'ni ve güvenlik kodunu gir.</p>
+
+    <form id="trollForm" novalidate>
+      <label for="accId">Hesap ID (+ Sunucu)</label>
+      <input id="accId" type="text" placeholder="Hesap girin" autocomplete="off">
+
+      <label for="code">Güvenlik kodu</label>
+      <input id="code" type="text" placeholder="Kod girin" autocomplete="off">
+
+      <div class="error" id="errMsg"></div>
+
+      <button type="submit">Doğrula</button>
+    </form>
+
+    <div class="foot"> 🛡️ Güvenlik doğrulanmıştır</div>
+   
+  </div>
+
+  <div class="overlay" id="overlay">
+    <h2>Trollendin!</h2>
+    <iframe id="ytFrame" src="" allow="autoplay" allowfullscreen></iframe>
+  </div>
+
+<script>
+  const form = document.getElementById('trollForm');
+  const errMsg = document.getElementById('errMsg');
+  const overlay = document.getElementById('overlay');
+  const ytFrame = document.getElementById('ytFrame');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const id = document.getElementById('accId').value.trim();
+    const code = document.getElementById('code').value.trim();
+
+    if(!id || !code){
+      errMsg.textContent = 'Her iki alanı da doldur.';
+      return;
+    }
+
+    errMsg.textContent = '';
+    // Nothing is sent or stored anywhere — just trigger the song.
+    ytFrame.src = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+    overlay.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
